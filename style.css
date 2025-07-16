@@ -1,5 +1,7 @@
 body{
     text-align: center;
+     transform: scale(2);     
+    transform-origin: top center;
 }
 /* div{
     display: flex;
