@@ -1,7 +1,9 @@
 body{
     text-align: center;
-     transform: scale(2);     
+    transform: scale(2);     
     transform-origin: top center;
+    background-color: #121212;
+    color: #ffffff;
 }
 /* div{
     display: flex;
@@ -16,6 +18,9 @@ body{
    /* position: absolute;
   top: 50%;
   left: 50%; */
+  h3{
+    color: aqua;
+  }
 
 div {
     display: flex;
