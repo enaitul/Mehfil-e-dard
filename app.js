@@ -32,6 +32,10 @@ const audioMap = {
     8: ["samaanE", "samaanK"]
 };
 
+  function changeText(button) {
+    button.innerText = "Mehfil-e-dard mai swagat hai!";
+  }
+
 function updateContent() {
     let h3 = document.querySelector("h3");
     let div = document.querySelector("div");
@@ -43,13 +47,13 @@ function updateContent() {
     let randomIndex = Math.floor(Math.random() * quotes.length);
     div.innerText = quotes[randomIndex];
 
-    // Stop all previous audios before playing a new one
+    
     document.querySelectorAll("audio").forEach(audio => {
         audio.pause();
         audio.currentTime = 0;
     });
 
-    // Play the selected audio
+    
     if (audioMap[randomIndex]) {
         let audios = audioMap[randomIndex];
         let randomAudioId = audios[Math.floor(Math.random() * audios.length)];
@@ -60,8 +64,8 @@ function updateContent() {
     }
 }
 
-// Call updateContent when button is clicked
+
 btn.addEventListener("click", updateContent);
 
-// Call updateContent on any key press
+
 document.addEventListener("keydown", updateContent);
