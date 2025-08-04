@@ -17,7 +17,12 @@ const quotes = [
     "Usse kaho boht jald milne aaye hume, kahi akele rehne ki aadat hi na padh jaaye hume",
     "Apne maiyyar se neeche toh mai aane se raha, sher bhuka hi sahi, ghans toh khane se raha",
     "Aap apne baal bandhlo, mai baar baar apni baat bhool raha hu",
-    "Ab nikal aao apne andar se, ghar mai samaan ki zaroorat hai"
+    "Ab nikal aao apne andar se, ghar mai samaan ki zaroorat hai",
+    "Woh kehti hai safed kapron mai bare acche lagte ho Asif. Aaj kafan mai lipta hu toh woh roti kyun hai?",
+    "Aere gaire ko teher ne ki izazat nahi di. Dil ko dil rakha hai bazaar nahi hone diya.",
+    "Hum bhi gaon mai kabhi shaam mai baitha karte the, humko bhi halaaton ne bahar bheja hai",
+    "Tera chup rehna mere zehn mai kya baith gaya, itni awaazein tujhe di ki gala baith gaya",
+    "Raat ke dariya ka kinara bhi kabhi ayega, waqt ka kya hai, humara bhi kabhi ayega. Ek accha din aaya tha zindagi mai kabhi, puchna tha dobara bhi kabhi ayega?"
 ];
 
 const audioMap = {
@@ -29,7 +34,12 @@ const audioMap = {
     5: ["akeleE", "akeleK"], 
     6: ["maiyyarE", "maiyyarK"], 
     7: ["baalE", "baalK"], 
-    8: ["samaanE", "samaanK"]
+    8: ["samaanE", "samaanK"],
+    9: ["kafanE"],
+    10: ["bazaarE"],
+    11: ["haalatonE"],
+    12: ["AwaazE"],
+    13: ["RaatE"]
 };
 
   function changeText(button) {
