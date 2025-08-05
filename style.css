@@ -118,3 +118,18 @@ footer {
   text-align: center;
   white-space: nowrap;
 }
+
+#welcome-message {
+  color: aqua;
+  font-size: 2rem;
+  margin-top: 2rem;
+  display: inline-block;
+  border-bottom: 2px solid transparent;
+  transition: border-bottom 0.3s ease;
+  font-family:Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+#welcome-message:hover {
+  border-bottom: 2px solid white;
+}

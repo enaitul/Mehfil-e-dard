@@ -72,10 +72,11 @@ function updateContent() {
     quoteSpan.innerText = quotes[randomIndex];
 
     
-    quoteSpan.style.background = colorObj.rgb;
+    document.getElementById("welcome-message").innerText = "Mehfil-e-dard mai swagat hai";
+
+    quoteSpan.style.background = colorObj.rgb;  
     quoteSpan.style.color = colorObj.textColor;
 
-    
     document.querySelectorAll("audio").forEach(audio => {
         audio.pause();
         audio.currentTime = 0;
@@ -90,6 +91,7 @@ function updateContent() {
         }
     }
 }
+
 
 btn.addEventListener("click", updateContent);
 document.addEventListener("keydown", updateContent);
