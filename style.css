@@ -133,3 +133,57 @@ footer {
 #welcome-message:hover {
   border-bottom: 2px solid white;
 }
+
+@media screen and (max-width: 600px) {
+  html {
+    font-size: 16px;
+  }
+
+  h3,
+  #welcome-message {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  button {
+    font-size: 1.2rem;
+    padding: 0.8rem 1.5rem;
+    margin-top: 3rem;
+  }
+
+  div {
+    font-size: 1.1rem;
+    margin-top: 2rem;
+  }
+
+#quote-text-wrapper {
+    margin-top: 8rem; 
+    text-align: center;
+  }
+
+  div span {
+    font-size: 0.9rem;
+    padding: 0.15em 0.5em;
+    border-radius: 8px;
+  }
+
+.Authors-Note {
+  font-size: 0.85rem;
+  padding: 1em;
+  margin: 0 auto;
+  max-width: 95vw;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  color: #e0e0e0;
+  background-color: transparent;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.6;
+  white-space: normal;
+}
+
+
+
+  
+}
