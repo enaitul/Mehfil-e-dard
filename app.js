@@ -1,11 +1,19 @@
 let btn = document.querySelector("button");
 
+function getTextColor(r, g, b) {
+    // Perceived brightness formula
+    let brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness > 125 ? "#000000" : "#ffffff";
+}
+
 function getRandomColor() {
     let r = Math.floor(Math.random() * 255);
     let g = Math.floor(Math.random() * 255);
     let b = Math.floor(Math.random() * 255);
-
-    return `rgb(${r}, ${g}, ${b})`;
+    return {
+        rgb: `rgb(${r}, ${g}, ${b})`,
+        textColor: getTextColor(r, g, b)
+    };
 }
 
 const quotes = [
@@ -54,22 +62,25 @@ const audioMap = {
     19: ["TamashaK"]
 };
 
-function changeText(button) {
-    button.innerText = "Mehfil-e-dard mai swagat hai!";
-}
-
 function updateContent() {
     let h3 = document.querySelector("h3");
     let quoteSpan = document.getElementById("quote-text");
-    let randomColor = getRandomColor();
-    h3.innerText = "Draw me in colors, you made me see.";
+    let colorObj = getRandomColor();
+
     let randomIndex = Math.floor(Math.random() * quotes.length);
+    h3.innerText = "Draw me in colors, you made me see.";
     quoteSpan.innerText = quotes[randomIndex];
-    quoteSpan.style.backgroundColor = randomColor;
+
+    
+    quoteSpan.style.background = colorObj.rgb;
+    quoteSpan.style.color = colorObj.textColor;
+
+    
     document.querySelectorAll("audio").forEach(audio => {
         audio.pause();
         audio.currentTime = 0;
     });
+
     if (audioMap[randomIndex]) {
         let audios = audioMap[randomIndex];
         let randomAudioId = audios[Math.floor(Math.random() * audios.length)];
