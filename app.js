@@ -94,4 +94,4 @@ function updateContent() {
 
 
 btn.addEventListener("click", updateContent);
-document.addEventListener("keydown", updateContent);
+// document.addEventListener("keydown", updateContent);

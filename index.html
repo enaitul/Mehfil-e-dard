@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Mehfil-E-Dard</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://kit.fontawesome.com/794d37ff83.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -17,7 +18,7 @@
 
     <br /><br /><br />
     <div id="quote-text-wrapper">
-        <span id="quote-text">&copy; By Md Enaitul Hoque and Kamran Asad</span>
+        <span id="quote-text">&copy; By <i class="fa-brands fa-instagram"></i><a href="https://www.instagram.com/enaitulhoque/">Md Enaitul Hoque</a> and <i class="fa-brands fa-instagram"></i><a href="https://www.instagram.com/kamranasad17/">Kamran Asad</a></span>
     </div>
 
     <!-- Hidden audio elements for all quotes -->
@@ -52,11 +53,56 @@
     <audio id="TamashaK" src="TamashaK.m4a" preload="auto"></audio>
 
     <div class="Authors-Note">
-        Author's Note: This is a casual fun project, made solely because we had a few minutes to kill. If you find it
-        fun, do let us know &#128512;
+        Welcome to our Page. Scroll down to share your thoughts!
     </div>
 
+    <!-- === CONTACT SECTION === -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-left">
+      <h2 class="sub-title">Get in Touch</h2>
+      <h3>Bleed ink! ✒️</h3>
+      
+      <!-- Only Instagram -->
+      <div class="social-icons">
+        <a href="https://www.instagram.com/_almostsaidit_/" target="_blank"><i class="fab fa-instagram">Instagram</i></a>
+      </div>
+    </div>
+
+    <div class="contact-right">
+      <form name="submit-to-google-sheet">
+  <input type="text" name="Name" placeholder="Your Name" required>
+  <input type="text" name="Instagram" placeholder="Your Instagram ID" required>
+  <textarea name="Poetry" rows="6" placeholder="Pour your mind here..." required></textarea>
+  <button type="submit" class="btn btn2">Send!</button>
+</form>
+
+
+      <span id="msg"></span>
+    </div>
+  </div>
+</section>
+
+
     <script src="app.js"></script>
+<script>
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbx4sQxXFozEUv6Y06Hw8YeLjV0CPDmqfyYqpCggnt6QsAb3lbQW1Mi0H3sNXK11bNzb/exec'
+  const form = document.forms['submit-to-google-sheet']
+        const msg = document.getElementById("msg")
+        form.addEventListener('submit', e => {
+            e.preventDefault()
+            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                .then(response => {
+                    msg.innerHTML = "Message sent succesfully"
+                    setTimeout(function () {
+                        msg.innerHTML = ""
+                    }, 1000)
+                    form.reset()
+                })
+                .catch(error => console.error('Error!', error.message))
+        })
+</script>
+
 </body>
 
 </html>
