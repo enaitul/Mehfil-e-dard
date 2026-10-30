@@ -1,0 +1,594 @@
+================================================================================
+MEHFIL-E-DARD: FULL-STACK AI SOCIAL MEDIA PLATFORM
+COMPREHENSIVE PROJECT BLUEPRINT, CURRENT AUDIT & FUTURE ROADMAP
+================================================================================
+Document Version: 1.0.0
+Project Name: Mehfil-E-Dard (محفلِ درد)
+Current Repo: Vanilla HTML5 / CSS3 / JavaScript (Client-side Audio & Google Sheet)
+Target Vision: Full-Stack AI-Powered Social Network for Shayari, Poetry & Deep Thoughts
+================================================================================
+
+HOW TO USE THIS FILE WITH CHATGPT / LLMs:
+--------------------------------------------------------------------------------
+This document is designed as both a master technical blueprint and an educational
+study guide. You can copy-paste sections or the entire text into ChatGPT with prompts
+such as:
+  - "I am building this project based on this plan. Can you explain Section 2 in detail?"
+  - "Act as my Senior Full-Stack & AI Mentor. Teach me how to implement Phase 1 step by step."
+  - "Explain the math behind the perceived brightness formula mentioned in Section 1.3."
+  - "Write the Prisma database schema described in Section 4 for PostgreSQL."
+  - "Show me how to connect the Gemini API to analyze Urdu poetry meter and sentiment."
+
+================================================================================
+TABLE OF CONTENTS
+================================================================================
+1. PROJECT AUDIT: WHAT WE HAVE DONE TILL NOW (CURRENT ARCHITECTURE)
+   1.1 Cultural Context & Core Idea
+   1.2 File Structure & Inventory
+   1.3 Detailed Code Analysis:
+       - app.js (Quote bank, Perceived Brightness algorithm, Audio sync engine)
+       - index.html (Audio preloading, Layout, Google Sheets Form Webhook)
+       - style.css (Dark poetic theme, Animations, Responsive layout)
+   1.4 Technical Debt & Limitations of Current Version
+
+2. THE TARGET VISION: FULL-STACK AI SOCIAL NETWORK
+   2.1 What the Platform Will Become
+   2.2 Target User Personas
+   2.3 Key Value Propositions
+
+3. RECOMMENDED PRODUCTION TECH STACK
+   3.1 Frontend & UI Layer
+   3.2 Backend & API Architecture
+   3.3 Database & Vector Storage
+   3.4 Media & Audio Processing
+   3.5 AI & Large Language Model (LLM) Layer
+   3.6 Authentication & Security
+
+4. SYSTEM ARCHITECTURE & DATA MODELS
+   4.1 Architectural Diagram (ASCII Flow)
+   4.2 Database Schema (PostgreSQL / Prisma)
+       - User (Poet / Reader Profile)
+       - Post / Shayari (Verses, Nazms, Thoughts)
+       - AudioRecitation (Spoken Voiceovers)
+       - Daad (Appreciation / Likes)
+       - SherReply / Comment (Couplet responses)
+       - Diwan (User Collections / Playlists)
+       - Follow & Activity Feed
+
+5. DEEP DIVE: THE AI SUITE (WHAT WE WILL BUILD)
+   5.1 AI Shayar (Poetic Co-Pilot & Couplet Completion)
+   5.2 Wazn & Meter Analysis (Taqti & Rhythm Guidance)
+   5.3 Lafz-o-Bayan (Contextual Urdu/Hindi Vocabulary Explainer)
+   5.4 Mood & Ambiance Generation (Dynamic Theming via Sentiment Analysis)
+   5.5 AI Tarannum (Emotional Voice Synthesis / TTS Recitation)
+   5.6 Classic Poetry Detection & Originality Check
+
+6. STEP-BY-STEP IMPLEMENTATION ROADMAP (PHASE BY PHASE)
+   - Phase 1: Re-platforming & Database Foundation
+   - Phase 2: Core Social Features & Feed Engine
+   - Phase 3: Voice Recitation & Audio Streaming Engine
+   - Phase 4: AI Services Integration (LLMs & Speech)
+   - Phase 5: UI/UX, Nastaliq Typography & Mobile Optimization
+   - Phase 6: Testing, Security & Cloud Deployment
+
+7. STEP-BY-STEP CHATGPT STUDY GUIDE & PROMPTS
+   - Prompt Pack 1: Architecture & Migrations
+   - Prompt Pack 2: Database & Backend Systems
+   - Prompt Pack 3: Audio Engineering on the Web
+   - Prompt Pack 4: AI & Prompt Engineering for Poetry
+
+================================================================================
+1. PROJECT AUDIT: WHAT WE HAVE DONE TILL NOW
+================================================================================
+
+1.1 Cultural Context & Core Idea:
+"Mehfil-E-Dard" is conceptually designed as a sanctuary for heartfelt, melancholic,
+and philosophical thoughts, Urdu/Hindi shayaris, and spoken-word poetry.
+It was created by Md Enaitul Hoque and Kamran Asad as an interactive audio-visual
+experience where users click to explore melancholic verses accompanied by
+spoken voiceovers.
+
+1.2 File Structure & Current Asset Inventory:
+- Root Files:
+  * index.html      : Single-page application skeleton, markup, audio tags, contact form.
+  * style.css       : 362 lines of custom CSS, dark aesthetic, responsive design, animations.
+  * app.js          : Core UI interaction logic, quote dataset, audio mapping, audio playback.
+  * background.jpg  : Background ambient texture image.
+- Audio Recitations (30 audio files in .m4a and .ogg formats):
+  * Recorded in two distinct voices: "E" (Enaitul) and "K" (Kamran).
+  * Examples: YaadE.m4a, YaadK.m4a, sitamE.m4a, sitamK.m4a, aaramEE.m4a, aaramKK.m4a,
+    nafratE.m4a, phoolE.m4a, maiyyarE.m4a, baalE.m4a, samaanE.m4a, kafanE.ogg,
+    bazaarE.ogg, haalatonE.ogg, AwaazE.ogg, RaatE.ogg, NamazK.m4a, SawaariK.m4a,
+    ParayeK.m4a, ChaiK.m4a, HaqK.m4a, TamashaK.m4a.
+
+1.3 Detailed Code Analysis:
+
+A. app.js - The Brain of the Current App:
+- Hardcoded Quote Bank:
+  Contains 20 curated couplets and quotes in Roman Urdu/Hindi capturing themes of
+  memory, isolation, self-respect, lost love, existential struggles, and stoicism.
+- Contrast Calculation (Perceived Brightness Formula):
+  ```javascript
+  function getTextColor(r, g, b) {
+      let brightness = (r * 299 + g * 587 + b * 114) / 1000;
+      return brightness > 125 ? "#000000" : "#ffffff";
+  }
+  ```
+  *Technical Concept*: Human vision is unequally sensitive to color wavelengths.
+  The green spectrum appears far brighter than blue or red. The formula uses standard
+  luminance weights (YIQ/ITU-R BT.601: 29.9% Red, 58.7% Green, 11.4% Blue) to determine
+  whether the dynamically generated random background color is light or dark, ensuring
+  the text remains accessible and readable with dynamic contrast switching.
+- Audio Mapping System (`audioMap`):
+  Maps each of the 20 quotes to one or two audio element IDs (e.g., index 0 maps to
+  ["yaadE", "yaadK"]).
+- Audio Playback Controller:
+  When the user clicks the action button:
+  1. A random quote is selected.
+  2. A random contrasting background badge color is computed and applied.
+  3. All `<audio>` elements are looped over, paused, and reset (`audio.currentTime = 0`).
+  4. If an audio track exists for the quote, one voice recording is randomly chosen
+     and `.play()` is triggered.
+
+B. index.html - Markup & External Integrations:
+- Audio Element Pool:
+  30 `<audio preload="auto">` elements preloaded into the DOM for near-zero playback latency.
+- Google Sheets Webhook Integration:
+  A form ("Bleed ink! ✒️") collecting:
+  * Name
+  * Instagram Handle
+  * Poetry / Thoughts
+  Submits via `fetch(scriptURL, { method: 'POST', body: new FormData(form) })` directly
+  to a Google Apps Script deployment.
+  This acted as a serverless, database-free submission inbox.
+
+C. style.css - Visual Identity:
+- Dark Mode Aesthetic: `#121212` background with a low-opacity fixed background overlay
+  (`body::before` with `opacity: 0.3` and `background-size: cover`).
+- Color Accents: Cyan/Aqua (`aqua`), Crimson (`crimson`), Gold/Amber (`#FFCC00`, `#fdd835`),
+  giving it a nocturnal, introspective mood.
+- Micro-interactions: Button hover scaling (`transform: scale(1.1)`), underline animations
+  via `::after` pseudo-elements on headings.
+- Responsive Flexbox Grid: Desktop two-column split (`.contact-left` and `.contact-right`),
+  collapsing gracefully on mobile screens via `@media` queries.
+
+1.4 Limitations of the Current Version (Why We Need to Evolve):
+- Static Content: Quotes are hardcoded in a client-side JavaScript array. Users cannot
+  view new posts without a code commit.
+- No Identity: There are no user accounts, authentication, or personal profiles.
+- Unidirectional Submissions: Poems submitted through the form disappear into a private
+  Google Sheet; they are not published to a public community feed.
+- Heavy Initial Load: Preloading 30 audio files directly inside HTML will become
+  unscalable as hundreds of recordings are added.
+- No AI Features: No automated feedback, rhyme/meter assistance, speech synthesis,
+  or sentiment-based discovery.
+
+================================================================================
+2. THE TARGET VISION: FULL-STACK AI SOCIAL NETWORK
+================================================================================
+
+2.1 What the Platform Will Become:
+"Mehfil-E-Dard 2.0" will be the definitive digital platform for poetry lovers,
+thinkers, and writers—a fusion of:
+1. Instagram's aesthetic visual feed (curated typography cards, mood backgrounds).
+2. Medium's long-form thoughts and literary appreciation.
+3. Clubhouse / TikTok's audio intimacy (voice recitations layered over ambient music).
+4. An intelligent AI Writing Studio (helping writers master Urdu/Hindi poetry,
+   rhyme schemes, meter, and vocabulary).
+
+2.2 Target User Personas:
+- The Emerging Shayar (Writer): Wants to publish couplets, receive feedback (Daad),
+  and test their poetic meter using AI tools.
+- The Spoken-Word Artist (Voice Reciter): Wants to record high-quality recitations
+  directly in the browser, add soothing background score, and share audio cards.
+- The Reader / Seeker: Loves reading poetry when feeling emotional, bookmarking
+  favorite verses into personal Diwans (anthologies), and discovering new voices.
+- The Curious Learner: Reads Urdu poetry but struggles with complex vocabulary;
+  uses AI hover-definitions to understand the nuances of classical terms.
+
+================================================================================
+3. RECOMMENDED PRODUCTION TECH STACK
+================================================================================
+
+3.1 Frontend & User Interface:
+- Framework: Next.js 15 (React 19, App Router)
+  * Why: Server-Side Rendering (SSR) for blazing fast initial load and SEO,
+    Server Actions for clean data mutations without REST boilerplate.
+- Styling: Tailwind CSS + Radix UI / Shadcn UI
+  * Clean, highly customizable dark mode components.
+- Typography:
+  * Urdu Nastaliq: `Noto Nastaliq Urdu`, `Gulzar`, or `Jameel Noori Nastaleeq` (web font).
+  * Hindi Devanagari: `Rozha One`, `Poppins`.
+  * Latin / Roman Urdu: `Cinzel`, `Playfair Display`, `Inter`.
+- Animations: Framer Motion
+  * Smooth page transitions, card flips, audio visualizer bars.
+
+3.2 Backend & APIs:
+- Runtime: Node.js (Next.js Route Handlers & Server Actions)
+- Microservices / AI Engine: Python (FastAPI) [Optional for advanced Urdu NLP]
+  * For heavy NLP tasks (Wazn meter analysis, Urdu syllable tokenization), a small
+    FastAPI service can run alongside Node.js.
+
+3.3 Database & Search:
+- Primary Database: PostgreSQL (via Supabase or Neon DB)
+  * Relational model perfect for Users, Posts, Likes, Comments, and Collections.
+- ORM: Prisma ORM
+  * Type-safe database queries, automated schema migrations.
+- Vector Search: pgvector (PostgreSQL extension)
+  * Enables semantic AI search: "Find poems about late-night loneliness without using the word loneliness".
+
+3.4 Media & Audio Infrastructure:
+- Storage: AWS S3 or Cloudinary or Supabase Storage
+  * Direct client uploads using presigned URLs for user audio recordings and profile images.
+- Audio Player: Howler.js or Wavesurfer.js
+  * Interactive audio waveforms, background music mixing, continuous playback bar.
+
+3.5 Artificial Intelligence (AI) Services:
+- Core LLM: Google Gemini 1.5 Pro / Flash API or OpenAI GPT-4o
+  * Gemini 1.5 Flash: Sub-second response time for rhyme suggestions and hover definitions.
+  * Gemini 1.5 Pro: Deep literary analysis, complex couplet completion, meter validation.
+- Speech & Voice: ElevenLabs API or Google Cloud Text-to-Speech
+  * Generates melancholic, resonant poetic recitations for users who don't want to record
+    their own voice.
+
+3.6 Authentication & Deployment:
+- Authentication: NextAuth.js (Auth.js v5) or Supabase Auth
+  * Email/Password, Google OAuth, Instagram OAuth.
+- Deployment: Vercel (Frontend & Serverless API), Supabase (Postgres & Storage).
+
+================================================================================
+4. SYSTEM ARCHITECTURE & DATA MODELS
+================================================================================
+
+4.1 Architecture Diagram:
+
+   [ Client: Next.js Responsive Web / PWA ]
+              │
+              ├─── User Interaction (Feed, Audio Player, Post Creator)
+              │
+              ▼
+   [ Next.js API Layer & Server Actions ]
+       │            │                   │
+       │ (Auth)     │ (CRUD / Social)   │ (AI Calls)
+       ▼            ▼                   ▼
+   [ NextAuth ]  [ Prisma ORM ]     [ Gemini AI / ElevenLabs ]
+                    │                   │
+                    ▼                   │ (Prompt: Wazn, Qafia, Meaning)
+             [ PostgreSQL ]             ▼
+             (Users, Posts,      [ Vector Embeddings ]
+              Daad, Diwans)       (Semantic Search)
+                    │
+                    ▼
+          [ Cloud Storage ]
+          (Audio .m4a/.mp3)
+
+4.2 Complete Database Schema (Prisma Format Reference):
+
+```prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id              String        @id @default(cuid())
+  username        String        @unique
+  email           String        @unique
+  passwordHash    String?
+  penName         String?       // "Takhallus" (e.g. Asif, Sahir, Ghalib)
+  bio             String?
+  avatarUrl       String?
+  instagramHandle String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  posts           Post[]
+  audioTracks     AudioTrack[]
+  daads           Daad[]        // Likes given
+  comments        Comment[]
+  diwans          Diwan[]       // Personal curated collections
+  following       Follow[]      @relation("UserFollows")
+  followers       Follow[]      @relation("UserFollowedBy")
+}
+
+model Post {
+  id              String        @id @default(cuid())
+  authorId        String
+  author          User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  title           String?
+  content         String        // The shayari / nazm / thought text
+  language        String        @default("roman_urdu") // "roman_urdu", "urdu", "hindi", "english"
+  scriptType      String        @default("latin")      // "latin", "nastaliq", "devanagari"
+  
+  moodTag         String?       // e.g. "Dard", "Ishq", "Tanhai", "Falsafa"
+  moodColor       String?       // Dynamic HEX/RGB for ambient card background
+  
+  radif           String?       // Poetic refrain word
+  qafia           String?       // Poetic rhyme scheme
+  
+  likesCount      Int           @default(0)
+  sharesCount     Int           @default(0)
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  audioTracks     AudioTrack[]
+  daads           Daad[]
+  comments        Comment[]
+  diwanItems      DiwanItem[]
+
+  @@index([authorId])
+  @@index([moodTag])
+}
+
+model AudioTrack {
+  id              String        @id @default(cuid())
+  postId          String
+  post            Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  audioUrl        String        // Cloudinary / S3 URL
+  durationSeconds Float
+  isAIGenerated   Boolean       @default(false)
+  voiceName       String?       // e.g. "Enaitul", "Kamran", "AI-Deep-Baritone"
+  
+  createdAt       DateTime      @default(now())
+
+  @@index([postId])
+}
+
+model Daad {
+  id              String        @id @default(cuid())
+  userId          String
+  postId          String
+  createdAt       DateTime      @default(now())
+
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post            Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+}
+
+model Comment {
+  id              String        @id @default(cuid())
+  postId          String
+  authorId        String
+  parentId        String?       // For threaded replies / Sher-o-Shayari counter-couplets
+  content         String
+  createdAt       DateTime      @default(now())
+
+  post            Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author          User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent          Comment?      @relation("CommentReplies", fields: [parentId], references: [id])
+  replies         Comment[]     @relation("CommentReplies")
+
+  @@index([postId])
+}
+
+model Diwan {
+  id              String        @id @default(cuid())
+  userId          String
+  title           String        // e.g., "Raat Ke Khayal", "Dard-e-Dil"
+  description     String?
+  isPrivate       Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items           DiwanItem[]
+}
+
+model DiwanItem {
+  id              String        @id @default(cuid())
+  diwanId         String
+  postId          String
+  addedAt         DateTime      @default(now())
+
+  diwan           Diwan         @relation(fields: [diwanId], references: [id], onDelete: Cascade)
+  post            Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([diwanId, postId])
+}
+
+model Follow {
+  followerId      String
+  followingId     String
+  createdAt       DateTime      @default(now())
+
+  follower        User          @relation("UserFollows", fields: [followerId], references: [id], onDelete: Cascade)
+  following       User          @relation("UserFollowedBy", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followingId])
+}
+```
+
+================================================================================
+5. DEEP DIVE: THE AI SUITE (WHAT WE WILL BUILD)
+================================================================================
+
+5.1 AI Shayar (Poetic Co-Pilot):
+- Feature: "Misra-e-Sani" (Second Line Generator)
+  * The user writes the first line of a sher:
+    "Ab nikal aao apne andar se..."
+  * The AI analyzes the emotional tenor, meter, and end-rhyme, offering 3 culturally
+    authentic second lines that complete the poetic thought.
+- Rhyme & Refrain Assistant (Qafia & Radif):
+  * When a user selects a rhyme ending (e.g. "milein", "khilein", "jalein"), the AI
+    suggests matching vocabulary that fits melancholic or philosophical contexts.
+
+5.2 Wazn & Meter Analyzer (Taqti):
+- Feature: Syllable weight checking.
+- Traditional Urdu poetry follows specific metrical structures (Bahr). The AI system
+  inspects the verse to indicate whether lines are balanced in length, rhythm, and cadence,
+  pointing out lines that feel rushed or drag out.
+
+5.3 Lafz-o-Bayan (Contextual Vocabulary & Metaphor Explainer):
+- Feature: Hover / Tap dictionary for classical Urdu words.
+- In verses with words like "Maiyyar", "Sitam", "Kafan", "Aitbaar", "Guftagu", a reader
+  can tap the word to see:
+  1. Literal Meaning.
+  2. Poetic Connotation (How classical masters like Mir, Ghalib, or Faiz used it).
+  3. Hindi / English translation.
+
+5.4 Mood & Ambiance Generation:
+- Feature: Dynamic visual theme matching poem emotion.
+- The AI classifies text into emotional palettes:
+  * Hasrat / Grief -> Midnight Charcoal (`#121212`) & Deep Indigo.
+  * Ishq / Love -> Crimson Burgundy & Antique Gold.
+  * Tanhai / Solitude -> Muted Slate Gray & Cyan.
+- Creates ambient CSS backgrounds and subtle animations automatically when a poem is opened.
+
+5.5 AI Tarannum (Emotional Voice Synthesis):
+- Feature: For authors who want their written thoughts converted into spoken audio.
+- Integrates with ElevenLabs or Google Speech with fine-tuned pitch, slow cadence,
+  and deliberate pauses at line breaks, mimicking live Mehfil recitations.
+
+5.6 Originality & Classic Attribution Check:
+- Feature: Verifying if a submitted poem is classic work or original.
+- Uses vector embeddings to scan against a database of classic Urdu poetry
+  (Mir Taqi Mir, Mirza Ghalib, Allama Iqbal, Faiz Ahmad Faiz, Jaun Elia, Ahmad Faraz).
+- If a match is found, gently informs the author:
+  "This couplet appears to be by Jaun Elia. We will tag Jaun Elia as the poet,
+   and you as the curator!"
+
+================================================================================
+6. STEP-BY-STEP IMPLEMENTATION ROADMAP (PHASE BY PHASE)
+================================================================================
+
+--------------------------------------------------------------------------------
+PHASE 1: FOUNDATION & PROJECT RE-PLATFORMING
+Goal: Modernize the repository into Next.js 15, connect PostgreSQL & NextAuth.
+--------------------------------------------------------------------------------
+Step 1.1: Initialize Next.js project with App Router, TypeScript, and Tailwind CSS.
+Step 1.2: Set up PostgreSQL database (Supabase free tier or Neon DB) and configure Prisma.
+Step 1.3: Run `npx prisma db push` to generate the database schema (Users, Posts, Audio).
+Step 1.4: Implement Authentication (Sign up, Log in, Session management with NextAuth).
+Step 1.5: Migrate existing 20 quotes from `app.js` into database seed script (`prisma/seed.ts`).
+
+--------------------------------------------------------------------------------
+PHASE 2: CORE SOCIAL FEATURES & COMMUNITY FEED
+Goal: Allow users to post thoughts, browse feeds, give "Daad" (likes), and comment.
+--------------------------------------------------------------------------------
+Step 2.1: Build Post Creation Modal:
+          - Rich text input with auto-formatting for couplets (Line 1, Line 2).
+          - Script selector (Roman English, Urdu Nastaliq, Hindi Devanagari).
+          - Tagging system (#Dard, #Tanhai, #Zindagi).
+Step 2.2: Build the Main Feed:
+          - Infinite scrolling feed of poetry cards.
+          - Perceived brightness & dynamic background colors preserved from original app!
+Step 2.3: Implement Social Reactions:
+          - "Daad Dein" (Like button with animated heart / quill icon).
+          - Sher Replies (Replying to a poem with another poem).
+          - Save to "Diwan" (Bookmark into personal collections).
+Step 2.4: User Profile Pages:
+          - Display user's pen name (Takhallus), bio, follower count, and published verses.
+
+--------------------------------------------------------------------------------
+PHASE 3: AUDIO ENGINE & SPOKEN-WORD RECITATIONS
+Goal: Preserve the signature audio experience of Mehfil-E-Dard with modern streaming.
+--------------------------------------------------------------------------------
+Step 3.1: In-Browser Voice Recorder:
+          - Use HTML5 MediaStream Recording API to let users record their recitation.
+          - Live waveform preview using Wavesurfer.js.
+Step 3.2: Audio Upload Pipeline:
+          - Upload recorded audio directly to Cloudinary or Supabase Storage.
+          - Save `audioUrl` and duration into `AudioTrack` table.
+Step 3.3: Persistent Audio Player Bar:
+          - Global sticky audio player at the bottom of the screen.
+          - Plays recitations continuously while the user browses different feed posts.
+          - Migrate original audio files (Enaitul & Kamran's recitations) to cloud storage.
+
+--------------------------------------------------------------------------------
+PHASE 4: ARTIFICIAL INTELLIGENCE SUITE INTEGRATION
+Goal: Connect LLM endpoints to empower writers and readers.
+--------------------------------------------------------------------------------
+Step 4.1: Set up Gemini 1.5 API client in Next.js Server Actions.
+Step 4.2: Build "Lafz-o-Bayan" (Hover word explainer):
+          - Selecting any word sends prompt to Gemini for brief poetic meaning & context.
+Step 4.3: Build "Misra Tarah" (AI Co-writer):
+          - Input first line -> Prompt Gemini to generate 3 rhyming, metered second lines.
+Step 4.4: Build Mood & Ambiance Classifier:
+          - On post submission, Gemini categorizes emotional theme and generates hex colors.
+Step 4.5: Optional AI Voice Recitation:
+          - Text-to-Speech API integration for automated poetry narration.
+
+--------------------------------------------------------------------------------
+PHASE 5: UI/UX POLISHING, TYPOGRAPHY & PWA
+Goal: Make the site feel like a high-end, immersive literary sanctuary.
+--------------------------------------------------------------------------------
+Step 5.1: Typography Engine:
+          - Integrate Google Fonts for Urdu Nastaliq (`Noto Nastaliq Urdu`) with proper line heights.
+Step 5.2: Smooth Animations:
+          - Framer motion card reveals, gentle quote fades, glowing borders on audio play.
+Step 5.3: Progressive Web App (PWA):
+          - Add `manifest.json` and service worker so users can install Mehfil-E-Dard on iOS/Android.
+
+--------------------------------------------------------------------------------
+PHASE 6: SECURITY, TESTING & DEPLOYMENT
+Goal: Launch a production-ready, scalable web platform.
+--------------------------------------------------------------------------------
+Step 6.1: Rate limiting on AI endpoints using Upstash Redis.
+Step 6.2: Content moderation filter to keep the platform respectful and abuse-free.
+Step 6.3: Deploy frontend to Vercel with automatic CI/CD from GitHub.
+Step 6.4: Monitor performance with Vercel Analytics and Sentry error tracking.
+
+================================================================================
+7. CHATGPT SELF-STUDY GUIDE & PROMPT PACK
+================================================================================
+Copy-paste these exact prompts into ChatGPT whenever you want to study a specific
+part of the project in depth:
+
+---
+PROMPT 1: UNDERSTANDING THE FOUNDATION
+"Hi ChatGPT! I am studying a project called Mehfil-E-Dard. It started as a vanilla JS
+app with an array of quotes and HTML5 audio, and we are migrating it into a Next.js 15
+full-stack social network. Can you explain:
+1. What are the key architectural differences between a vanilla JS client app and a
+   Next.js App Router application?
+2. How does Server-Side Rendering (SSR) help a poetry platform with SEO and performance?
+3. How should we structure our folders in Next.js for a clean architecture?"
+---
+
+---
+PROMPT 2: DATABASE & SOCIAL MEDIA DATA MODELING
+"Act as my Senior Database Architect. Look at the Prisma schema for Mehfil-E-Dard
+in our plan:
+1. Explain how the User, Post, AudioTrack, Daad (Like), and Diwan (Collection)
+   models relate to each other.
+2. Why did we use `@unique([userId, postId])` on the Daad model? What happens if
+   we don't?
+3. How do we write a Prisma query to fetch a user's feed along with the total count
+   of Daad and whether the logged-in user has already liked each post?"
+---
+
+---
+PROMPT 3: HANDLING AUDIO RECORDING & STREAMING
+"Teach me how audio works in full-stack web development:
+1. How does the browser's `navigator.mediaDevices.getUserMedia` record microphone audio?
+2. What format does it record in (Blob / MediaRecorder), and how do we upload that Blob
+   to cloud storage like Supabase Storage or Cloudinary?
+3. How can we make an audio player that continues playing smoothly at the bottom of the
+   screen even when the user clicks to view different pages?"
+---
+
+---
+PROMPT 4: AI PROMPT ENGINEERING FOR URDU/HINDI SHAYARI
+"Act as an AI Engineer and Urdu Literary Scholar.
+1. Write a system prompt for Gemini 1.5 Pro to act as a poetic co-pilot (Misra Tarah)
+   that understands Radif (refrain) and Qafia (rhyme).
+2. Show me how to format the prompt so that it returns strict JSON with 3 options,
+   explaining the meter and emotional nuance of each suggestion.
+3. How can we implement a hover-explainer API that defines rare Urdu words in simple
+   Roman Urdu and English?"
+---
+
+================================================================================
+END OF BLUEPRINT
+Keep this file in your repository as your technical compass and learning syllabus!
+================================================================================
+
